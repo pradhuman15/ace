@@ -20,6 +20,8 @@ const redirectToUnauthorized = (req) => {
 // TODO: check organization paramter matches with user permissions
 // TODO: forward permissions which are appliicable
 export async function middleware(req) {
+    // Create response object at the beginning
+    const response = NextResponse.next();
 
     const { pathname } = req.nextUrl;
     if (pathname.startsWith("/api/auth")) {
@@ -63,7 +65,10 @@ export async function middleware(req) {
         }
     } catch (error) {
         console.error(`${pathname} : Error while extracting cookie : invalid-cookie : ${error}`);
-        return redirectToInvalid(req);
+        // Clear the malformed cookie to prevent repeated errors
+        const invalidResponse = redirectToInvalid(req);
+        invalidResponse.cookies.delete("__Secure-org-token");
+        return invalidResponse;
     }
 
 
