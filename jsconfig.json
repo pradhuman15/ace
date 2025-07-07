@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@redux/*" : ["./src/redux/*"],
+      "@lib/*" : ["./src/lib/*"],
+      "@app/*" : ["./src/app/*"],
+      "@db" : ["./src/db.js"],
+      "@config" : ["./src/config.js"],
+    }
+  }
+}

@@ -1,0 +1,11 @@
+**/dumps
+**/credentials
+**/PSQLimport.py
+**/template.csv
+**/app_old.py
+
+# **/.next
+**/node_modules
+# **/app
+# **/components
+.env
