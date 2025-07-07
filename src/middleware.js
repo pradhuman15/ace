@@ -57,14 +57,42 @@ export async function middleware(req) {
     let organizationCookie, organizationData, organizationId;
     try {
         organizationCookie = req.cookies.get("__Secure-org-token")?.value ?? null;
-        organizationData = JSON.parse(atob(organizationCookie))
+        
+        // Check if cookie exists and is a non-empty string
+        if (!organizationCookie || typeof organizationCookie !== 'string' || organizationCookie.trim() === '') {
+            console.error(`${pathname} : Missing or empty organization cookie`);
+            return redirectToInvalid(req);
+        }
+
+        // Attempt to decode the base64 cookie
+        let decodedCookie;
+        try {
+            decodedCookie = atob(organizationCookie);
+        } catch (decodeError) {
+            console.error(`${pathname} : Invalid base64 in organization cookie`);
+            const invalidResponse = redirectToInvalid(req);
+            invalidResponse.cookies.delete("__Secure-org-token");
+            return invalidResponse;
+        }
+
+        // Check if decoded content is not empty
+        if (!decodedCookie || decodedCookie.trim() === '') {
+            console.error(`${pathname} : Empty decoded organization cookie`);
+            const invalidResponse = redirectToInvalid(req);
+            invalidResponse.cookies.delete("__Secure-org-token");
+            return invalidResponse;
+        }
+
+        // Attempt to parse JSON
+        organizationData = JSON.parse(decodedCookie);
         organizationId = organizationData?.id ?? null;
+        
         if (!organizationId) {
             console.error(`${pathname} : Invalid value in organization-cookie`);
             return redirectToInvalid(req);
         }
     } catch (error) {
-        console.error(`${pathname} : Error while extracting cookie : invalid-cookie : ${error}`);
+        console.error(`${pathname} : Error while extracting cookie : invalid-cookie : ${error.message}`);
         // Clear the malformed cookie to prevent repeated errors
         const invalidResponse = redirectToInvalid(req);
         invalidResponse.cookies.delete("__Secure-org-token");
