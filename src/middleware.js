@@ -26,11 +26,11 @@ export async function middleware(req) {
         return NextResponse.next();
     }
 
-    // AUTH-DISABLE
-    const disableCheckHeaders = new Headers(req.headers);
-    disableCheckHeaders.set("x-user-permissions", "");
-    disableCheckHeaders.set("x-organization", "8c15c83a-683e-4577-8fe1-17dd63cbea0b");
-    return NextResponse.next({ headers: disableCheckHeaders });
+    // AUTH-DISABLE - Commented out to fix request scope errors
+    // const disableCheckHeaders = new Headers(req.headers);
+    // disableCheckHeaders.set("x-user-permissions", "");
+    // disableCheckHeaders.set("x-organization", "8c15c83a-683e-4577-8fe1-17dd63cbea0b");
+    // return NextResponse.next({ headers: disableCheckHeaders });
 
     if (
         pathname.startsWith("/api/organizations") ||
