@@ -95,6 +95,10 @@ export async function middleware(req) {
 export const config = {
     matcher: [
         '/api/:path*',
+        '/',
+        '/dashboard/:path*',
+        '/administration/:path*',
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
     ]
 };
 
